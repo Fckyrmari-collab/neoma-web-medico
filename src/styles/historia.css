@@ -1,0 +1,312 @@
+/* ============================================================
+   NEOMA · Pestaña "Historia Clínica"
+   ============================================================ */
+
+/* ==================== 1. BASE + RESUMEN ==================== */
+.hc { display: flex; flex-direction: column; gap: 18px; }
+
+/* Distribución: exámenes a la izquierda, citas a la derecha */
+.hc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+
+/* Cabecera común de cada tarjeta */
+.hc-cabecera {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--borde);
+}
+.hc-cabecera > div:not([class]) { flex: 1 1 180px; min-width: 0; }
+.hc-cabecera h2 { margin: 0; font-size: 15px; font-weight: 600; }
+.hc-cabecera > div > span { font-size: 12px; color: var(--texto-3); }
+.hc-cabecera__icono {
+  flex: none; display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--menta-suave); color: var(--verde-900);
+}
+.hc-contador {
+  margin-left: auto; min-width: 28px; padding: 3px 9px; border-radius: 99px; text-align: center;
+  font-size: 11px; font-weight: 600; background: var(--crema); color: var(--texto-2);
+}
+.hc-lista-carga { display: flex; flex-direction: column; gap: 10px; padding: 18px 22px; }
+
+/* Etiquetas de estado (se usan en todas las secciones) */
+.hc-estado {
+  flex: none; padding: 3px 10px; border-radius: 99px;
+  font-size: 10.5px; font-weight: 600; white-space: nowrap;
+}
+.hc-estado--ok, .hc-estado--controlada { background: #e3f1e7; color: var(--c-ok); }
+.hc-estado--activa, .hc-estado--alterado { background: #fbecec; color: var(--c-fc); }
+.hc-estado--remision { background: #e6eef6; color: var(--c-info); }
+.hc-estado--prog { background: #e6eef6; color: var(--c-info); }
+.hc-estado--pendiente { background: #fdf3d8; color: #8a5f00; }
+.hc-estado--cancel { background: var(--crema); color: var(--texto-3); }
+
+.hc code {
+  font-family: var(--fuente-mono); font-size: 11px; font-weight: 600;
+  padding: 2px 7px; border-radius: 6px;
+  background: var(--menta-suave); color: var(--verde-900);
+}
+
+/* Botones tipo píldora para filtros */
+.hc-pildoras { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.hc-pildora {
+  height: 30px; padding: 0 13px;
+  border: 1px solid var(--borde); border-radius: 99px;
+  background: var(--blanco); color: var(--texto-2);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.hc-pildora:hover:not(:disabled) { border-color: var(--verde-900); color: var(--verde-900); }
+.hc-pildora.activa { background: var(--verde-900); border-color: var(--verde-900); color: var(--blanco); }
+.hc-pildora:disabled { cursor: default; opacity: 0.55; }
+
+/* Aviso de alergias */
+.hc-alergias {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 12px 18px;
+  border: 1px solid #f0c9cc; border-radius: 14px;
+  background: var(--error-fondo); color: var(--error);
+  font-size: 13px;
+}
+.hc-alergias__icono {
+  display: grid; place-items: center;
+  width: 28px; height: 28px; border-radius: 50%; background: #f9dadc;
+}
+.hc-alergias ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.hc-alergias li {
+  padding: 3px 10px; border-radius: 99px;
+  background: var(--blanco); border: 1px solid #f0c9cc;
+  font-size: 12px; font-weight: 600;
+}
+
+/* Indicadores */
+.hc-resumen { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.hc-kpi { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+.hc-kpi__titulo { font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--texto-3); }
+.hc-kpi__valor { font-family: var(--fuente-titulo); font-size: 24px; font-weight: 600; color: var(--verde-900); line-height: 1.1; }
+.hc-kpi__detalle { font-size: 11.5px; color: var(--texto-3); }
+.tarjeta.hc-kpi--destacado { border: 0; background: linear-gradient(135deg, #24493a, var(--verde-900)); }
+.hc-kpi--destacado .hc-kpi__titulo { color: var(--menta); opacity: 0.85; }
+.hc-kpi--destacado .hc-kpi__valor { color: var(--blanco); }
+.hc-kpi--destacado .hc-kpi__detalle { color: rgba(255, 255, 255, 0.65); }
+.hc-kpi--alerta .hc-kpi__detalle { color: var(--c-fc); font-weight: 600; }
+
+.hc-nota { margin: 0; text-align: center; font-size: 11.5px; color: var(--texto-3); }
+
+@media (max-width: 1100px) {
+  .hc-resumen { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 960px) {
+  .hc-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .hc-resumen { gap: 12px; }
+  .hc-kpi__valor { font-size: 19px; }
+  .hc-pildoras { margin-left: 0; width: 100%; }
+}
+
+/* ==================== 2. ENFERMEDADES Y CONDICIONES ==================== */
+.hc-cond-grid {
+  list-style: none; margin: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px;
+  padding: 20px 22px 22px;
+}
+.hc-cond {
+  position: relative;
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 16px 18px 16px 20px;
+  border: 1px solid var(--borde); border-radius: 16px;
+  background: var(--blanco);
+  overflow: hidden;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.hc-cond:hover { box-shadow: 0 10px 24px -16px rgba(26, 54, 38, 0.45); transform: translateY(-1px); }
+/* franja de color a la izquierda según el estado */
+.hc-cond::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--franja); }
+.hc-cond--activa { --franja: var(--c-fc); }
+.hc-cond--controlada { --franja: var(--c-ok); }
+.hc-cond--remision { --franja: var(--c-info); }
+
+.hc-cond__fila { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.hc-cond h3 { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.3; }
+.hc-cond__tto {
+  margin: 0; padding: 9px 12px; border-radius: 10px;
+  background: var(--crema); font-size: 12.5px; color: var(--texto);
+}
+.hc-cond__tto span {
+  display: block; margin-bottom: 2px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-3);
+}
+.hc-cond__meta { margin: auto 0 0; font-size: 11.5px; line-height: 1.5; color: var(--texto-2); }
+.hc-cond__meta em { font-style: normal; color: var(--texto-3); }
+
+.hc-sev { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; color: var(--texto-2); text-transform: capitalize; }
+.hc-sev i { width: 14px; height: 5px; border-radius: 3px; background: #ecebe5; }
+.hc-sev span { margin-left: 5px; }
+.hc-sev--leve i.on { background: var(--c-ok); }
+.hc-sev--moderada i.on { background: var(--c-estres); }
+.hc-sev--severa i.on { background: var(--c-fc); }
+
+@media (max-width: 640px) {
+  .hc-cond-grid { grid-template-columns: 1fr; padding: 16px; }
+}
+
+/* ==================== 3. EXÁMENES Y DOCUMENTOS ==================== */
+.hc-examenes__cuerpo { padding: 18px 22px 20px; display: flex; flex-direction: column; gap: 14px; }
+
+/* Pestañas grandes como en la app */
+.hc-toggle {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  padding: 5px; border-radius: 16px; background: var(--crema);
+}
+.hc-toggle button {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  height: 42px; border: 0; border-radius: 12px;
+  background: none; color: var(--texto-2);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.hc-toggle button:hover { color: var(--verde-900); }
+.hc-toggle button.activo { background: var(--verde-900); color: var(--blanco); box-shadow: 0 6px 14px -8px rgba(26, 54, 38, 0.7); }
+.hc-toggle__n {
+  min-width: 20px; padding: 1px 6px; border-radius: 99px;
+  font-size: 10.5px; background: rgba(0, 0, 0, 0.06);
+}
+.hc-toggle button.activo .hc-toggle__n { background: rgba(255, 255, 255, 0.18); }
+
+.hc-banner {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; border-radius: 16px;
+  background: var(--menta); color: var(--verde-900);
+}
+.hc-banner div { display: flex; flex-direction: column; }
+.hc-banner strong { font-size: 14px; }
+.hc-banner span { font-size: 11.5px; opacity: 0.75; }
+
+.hc-vacio-docs {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+  padding: 28px 20px;
+  border: 1.5px dashed #d6d9d3; border-radius: 16px;
+}
+.hc-vacio-docs > span {
+  display: grid; place-items: center;
+  width: 46px; height: 46px; margin-bottom: 4px; border-radius: 14px;
+  background: var(--menta); color: var(--verde-900);
+}
+.hc-vacio-docs strong { font-size: 13.5px; }
+.hc-vacio-docs p { margin: 0; max-width: 320px; font-size: 12px; line-height: 1.5; color: var(--texto-3); }
+
+.hc-docs {
+  list-style: none; margin: 0; padding: 0;
+  border: 1px solid var(--borde); border-radius: 16px; overflow: hidden;
+}
+.hc-docs li { display: flex; align-items: center; gap: 12px; padding: 12px 16px; transition: background 0.15s; }
+.hc-docs li + li { border-top: 1px solid var(--borde); }
+.hc-docs li:hover { background: #fbfbf8; }
+.hc-docs__icono {
+  flex: none; display: grid; place-items: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--menta-suave); color: var(--verde-900);
+}
+.hc-docs__texto { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.hc-docs__texto strong { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hc-docs__texto span { font-size: 11.5px; color: var(--texto-3); }
+.hc-docs__acciones { display: flex; gap: 2px; }
+.hc-docs__acciones a {
+  display: grid; place-items: center;
+  width: 32px; height: 32px; border-radius: 8px; color: var(--texto-2);
+}
+.hc-docs__acciones a:hover { background: var(--crema); color: var(--verde-900); }
+.hc-docs__acciones a.deshabilitado { opacity: 0.35; pointer-events: none; }
+
+.hc-aviso { display: flex; gap: 8px; margin: 0; font-size: 11.5px; line-height: 1.5; color: var(--texto-3); }
+.hc-aviso svg { flex: none; margin-top: 2px; }
+
+@media (max-width: 640px) {
+  .hc-examenes__cuerpo { padding: 16px; }
+  .hc-toggle button { font-size: 12px; gap: 6px; }
+  .hc-docs li { flex-wrap: wrap; }
+  .hc-docs__texto { flex-basis: calc(100% - 52px); }
+  .hc-docs li > .hc-estado { margin-left: 52px; }
+  .hc-docs__acciones { margin-left: auto; }
+}
+
+/* ==================== 4. CITAS MÉDICAS ==================== */
+.hc-citas { min-width: 0; }
+.hc-herramientas {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px 22px; border-bottom: 1px solid var(--borde);
+}
+.hc-herramientas .hc-pildoras { margin-left: 0; }
+.hc-buscar {
+  display: flex; align-items: center; gap: 8px;
+  height: 36px; padding: 0 12px;
+  border: 1px solid var(--borde); border-radius: 10px;
+  background: var(--campo-fondo); color: var(--texto-3);
+}
+.hc-buscar:focus-within { border-color: var(--verde-900); background: var(--blanco); }
+.hc-buscar input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 12.5px; color: var(--texto); }
+
+.hc-linea { padding: 4px 20px 20px; max-height: 720px; overflow-y: auto; }
+.hc-grupo__mes {
+  margin: 16px 0 8px 60px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-3);
+}
+.hc-grupo ol { list-style: none; margin: 0; padding: 0; position: relative; }
+.hc-grupo ol::before {
+  content: ''; position: absolute; left: 51px; top: 6px; bottom: 6px;
+  width: 2px; border-radius: 2px; background: #ecebe5;
+}
+
+.hc-cita { display: grid; grid-template-columns: 40px 24px minmax(0, 1fr); padding: 5px 0; }
+.hc-cita__fecha { display: flex; flex-direction: column; align-items: center; padding-top: 10px; line-height: 1; }
+.hc-cita__fecha strong { font-family: var(--fuente-titulo); font-size: 19px; font-weight: 600; }
+.hc-cita__fecha span { margin-top: 3px; font-size: 10.5px; text-transform: uppercase; color: var(--texto-3); }
+.hc-cita__punto {
+  justify-self: center; margin-top: 18px; position: relative; z-index: 1;
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 3px solid var(--blanco);
+  background: var(--estado); box-shadow: 0 0 0 1.5px var(--estado);
+}
+.hc-cita--ok { --estado: var(--c-ok); }
+.hc-cita--prog { --estado: var(--c-info); }
+.hc-cita--cancel { --estado: #b9bcb8; }
+
+.hc-cita__tarjeta {
+  margin-left: 6px; border: 1px solid var(--borde); border-radius: 14px; background: var(--blanco);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.hc-cita__tarjeta:hover { border-color: #d6d9d3; box-shadow: 0 6px 16px -12px rgba(26, 54, 38, 0.35); }
+.hc-cita--cancel .hc-cita__tarjeta { background: #fbfbf9; }
+.hc-cita--cancel .hc-cita__principal > strong { color: var(--texto-3); text-decoration: line-through; }
+
+.hc-cita__cabecera {
+  width: 100%; display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px; border: 0; background: none; text-align: left; color: inherit; cursor: pointer;
+}
+.hc-cita__cabecera:disabled { cursor: default; }
+.hc-cita__principal { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.hc-cita__principal > strong { font-size: 13.5px; font-weight: 600; }
+.hc-cita__titulo { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.hc-cita__meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--texto-2); }
+.hc-cita__meta span { display: inline-flex; align-items: center; gap: 4px; }
+.hc-cita__meta svg { color: var(--texto-3); }
+.hc-cita__flecha { flex: none; margin-top: 4px; color: var(--texto-3); transition: transform 0.2s; }
+.hc-cita__flecha.girada { transform: rotate(180deg); }
+
+.hc-cita__detalle {
+  display: grid; gap: 10px; margin: 0 14px 14px; padding: 12px 14px;
+  border-radius: 10px; background: var(--crema);
+}
+.hc-cita__detalle p { margin: 4px 0 0; font-size: 12.5px; line-height: 1.6; }
+.hc-mini-etiqueta { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-3); }
+.hc-especialidad {
+  padding: 3px 9px; border-radius: 99px; font-size: 10.5px; font-weight: 600;
+  background: var(--menta-suave); color: var(--verde-900);
+}
+
+@media (max-width: 640px) {
+  .hc-herramientas { padding: 12px 16px; }
+  .hc-linea { padding: 4px 12px 16px; max-height: none; }
+  .hc-grupo__mes { margin-left: 52px; }
+  .hc-cita { grid-template-columns: 34px 20px minmax(0, 1fr); }
+  .hc-grupo ol::before { left: 43px; }
+}

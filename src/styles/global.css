@@ -1,0 +1,432 @@
+/* ============================================================
+   NEOMA · Paleta y tokens (tomados del manual de marca)
+   ============================================================ */
+:root {
+  /* Marca */
+  --verde-900: #1a3626;   /* verde oscuro principal */
+  --verde-700: #2a4a38;   /* hover del botón */
+  --menta: #d2e6d8;       /* verde menta */
+  --menta-suave: #edf4ef; /* fondo del aviso */
+  --petroleo: #4a6b70;    /* azul petróleo (acentos) */
+  --crema: #f4f3ed;       /* fondo general */
+  --blanco: #ffffff;
+
+  /* Texto */
+  --texto: #15191a;
+  --texto-2: #5f6563;
+  --texto-3: #a2a6a3;
+
+  /* Estados */
+  --error: #b42330;
+  --error-fondo: #fcf0f0;
+  --deshabilitado: #8e9b92;
+
+  /* Superficies */
+  --borde: #e4e3dc;
+  --campo-fondo: #f9f9f6;
+  --sombra-card: 0 24px 60px -20px rgba(26, 54, 38, 0.18), 0 2px 6px rgba(26, 54, 38, 0.05);
+  --sombra-boton: 0 10px 22px -10px rgba(26, 54, 38, 0.55);
+
+  --radio-card: 22px;
+  --radio-campo: 14px;
+
+  --fuente: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fuente-titulo: 'Sora', var(--fuente);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  font-family: var(--fuente);
+  color: var(--texto);
+  background: var(--crema);
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font: inherit; }
+img { display: block; max-width: 100%; }
+
+:focus-visible {
+  outline: 3px solid var(--petroleo);
+  outline-offset: 2px;
+}
+
+/* ---------------- Layout ---------------- */
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+
+.app__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px 40px;
+  gap: 22px;
+}
+
+.app__stage {
+  width: 100%;
+  max-width: 400px;
+  animation: entrar 0.35s ease-out both;
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------------- Header ---------------- */
+.header {
+  height: 56px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--blanco);
+  border-bottom: 1px solid var(--borde);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header__marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--verde-900);
+}
+
+.header__simbolo { width: 26px; height: 26px; object-fit: contain; }
+
+.header__nombre {
+  font-family: var(--fuente-titulo);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.18em;
+}
+
+.header__tag { font-size: 12.5px; color: var(--texto-3); }
+
+/* ---------------- Card ---------------- */
+.card {
+  position: relative;
+  background: var(--blanco);
+  border-radius: var(--radio-card);
+  box-shadow: var(--sombra-card);
+  padding: 40px 28px 30px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--verde-900);
+}
+
+.card__volver {
+  position: absolute;
+  top: 26px;
+  left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--texto-2);
+  font-size: 13px;
+  cursor: pointer;
+}
+.card__volver:hover { color: var(--verde-900); background: var(--crema); }
+
+.card:has(.card__volver) { padding-top: 64px; }
+
+.card__titulo {
+  font-family: var(--fuente-titulo);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 18px 0 8px;
+}
+
+.card__subtitulo {
+  margin: 0 0 24px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--texto-2);
+}
+
+.card__nota {
+  margin: 18px 0 0;
+  font-size: 11.5px;
+  color: var(--texto-3);
+}
+
+/* Emblema: símbolo NEOMA dentro de un círculo punteado */
+.emblema {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1.5px dotted #c8cdc9;
+  display: grid;
+  place-items: center;
+  background: var(--blanco);
+}
+.emblema img { width: 26px; height: 26px; object-fit: contain; }
+.emblema--ok { border-color: var(--menta); border-style: solid; background: var(--menta-suave); }
+
+/* ---------------- Aviso consentimiento ---------------- */
+.aviso {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  background: var(--menta-suave);
+  border: 1px solid #cfe2d5;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 22px;
+  color: var(--petroleo);
+}
+.aviso svg { flex: none; width: 14px; height: 14px; margin-top: 2px; }
+.aviso p { margin: 0; font-size: 12px; line-height: 1.55; color: #3c4b47; }
+
+/* ---------------- Campo documento ---------------- */
+.campo__label {
+  display: block;
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--texto-3);
+  margin-bottom: 8px;
+}
+
+.campo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 14px;
+  background: var(--campo-fondo);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-campo);
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.campo:focus-within {
+  border-color: var(--verde-900);
+  background: var(--blanco);
+  box-shadow: 0 0 0 3px rgba(26, 54, 38, 0.08);
+}
+.campo__icono { color: var(--texto-3); flex: none; }
+
+.campo input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  color: var(--texto);
+}
+.campo input::placeholder { color: var(--texto-3); }
+
+.campo--error,
+.campo--error:focus-within {
+  background: var(--error-fondo);
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(180, 35, 48, 0.08);
+}
+.campo--error .campo__icono { color: var(--error); }
+
+.mensaje-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--error);
+  animation: sacudir 0.32s ease;
+}
+.mensaje-error svg { width: 13px; height: 13px; flex: none; }
+
+@keyframes sacudir {
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+/* ---------------- Botones ---------------- */
+.boton {
+  width: 100%;
+  height: 46px;
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--verde-900);
+  color: var(--blanco);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: var(--sombra-boton);
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+.boton:hover:not(:disabled) { background: var(--verde-700); }
+.boton:active:not(:disabled) { transform: translateY(1px); }
+.boton:disabled { cursor: not-allowed; }
+form .boton:disabled:not(:has(.spinner)) {
+  background: var(--deshabilitado);
+  box-shadow: 0 10px 22px -12px rgba(26, 54, 38, 0.3);
+}
+
+.boton--secundario {
+  background: var(--blanco);
+  color: var(--verde-900);
+  border: 1px solid var(--borde);
+  box-shadow: none;
+}
+.boton--secundario:hover:not(:disabled) { background: var(--crema); }
+
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--verde-900);
+  cursor: pointer;
+}
+.enlace svg { width: 14px; height: 14px; }
+.enlace:hover:not(:disabled) { background: var(--crema); }
+.enlace:disabled { color: var(--texto-3); font-weight: 500; cursor: default; }
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: girar 0.7s linear infinite;
+}
+.girar { animation: girar 0.8s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* ---------------- Tarjeta paciente ---------------- */
+.paciente {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 26px;
+  text-align: left;
+  background: var(--crema);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+}
+.paciente__avatar {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--menta-suave);
+  color: var(--verde-900);
+  font-size: 11px;
+  font-weight: 700;
+}
+.paciente__datos { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.paciente__datos strong { font-size: 13px; font-weight: 600; }
+.paciente__datos span { font-size: 11.5px; color: var(--texto-3); }
+.paciente__icono { color: var(--texto-2); flex: none; }
+
+/* ---------------- Código (OTP) ---------------- */
+.otp { display: flex; justify-content: center; gap: 12px; }
+
+.otp__caja {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-family: var(--fuente-titulo);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--verde-900);
+  background: var(--campo-fondo);
+  border: 1.5px solid #dcdcd4;
+  border-radius: 12px;
+  outline: none;
+  caret-color: var(--verde-900);
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.otp__caja:focus {
+  border-color: var(--verde-900);
+  background: var(--blanco);
+  box-shadow: 0 0 0 3px rgba(26, 54, 38, 0.1);
+}
+.otp__caja--llena {
+  border-color: var(--verde-900);
+  background: var(--menta-suave);
+  box-shadow: 0 0 0 3px rgba(210, 230, 216, 0.6);
+}
+.otp__caja:disabled { opacity: 0.7; }
+
+.otp--error .otp__caja,
+.otp--error .otp__caja:focus {
+  border-color: var(--error);
+  box-shadow: none;
+}
+.otp--error { animation: sacudir 0.32s ease; }
+
+.otp__mensaje {
+  min-height: 18px;
+  margin: 14px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--texto-3);
+}
+.otp__mensaje svg { width: 13px; height: 13px; flex: none; }
+.otp__mensaje--error { color: var(--error); font-size: 12px; }
+.otp__mensaje--ok { color: var(--petroleo); }
+
+/* ---------------- Footer ---------------- */
+.footer { display: flex; gap: 6px; font-size: 12px; color: var(--texto-2); }
+.footer a { color: inherit; text-decoration: none; }
+.footer a:hover { color: var(--verde-900); text-decoration: underline; }
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 560px) {
+  .header { padding: 0 16px; }
+  .header__tag { display: none; }
+  .app__main { justify-content: flex-start; padding-top: 28px; }
+  .card { padding: 34px 20px 26px; }
+  .card:has(.card__volver) { padding-top: 60px; }
+  .otp { gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition: none !important; }
+}
